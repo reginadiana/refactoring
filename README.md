@@ -1,8 +1,8 @@
-# refactoring
+## refactoring
 
 Projeto para explorar os conceitos de refatoração, clean architecture e TDD
 
-# Setup
+## setup
 
 ```bash
 yarn install
