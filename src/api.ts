@@ -8,49 +8,105 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
+type CreateUserParams = {
+	name: string;
+	email: string;
+	cpf: string;
+	isDriver: boolean;
+	carPlate: string;
+}
+
+type Error = {
+	message: string;
+}
+
+type Data = {
+	accountId: number;
+}
+
+type CreateUserResponse = {
+	status: number;
+	error?: Error;
+	data?: Data;
+}
+
+export function createUser(params: Partial<CreateUserParams>): CreateUserResponse {
+	const isValid = validateParams(params);
+
+	return { status: 200 }
+}
+
+function validateParams(params: Partial<CreateUserParams>): { isValid: boolean } {
+	return { isValid: true };
+}
+
+async function postSignUp() {
+
+}
+
 app.post("/signup", async function (req, res) {
-	let result;
+	const { name, cpf, email, isDriver, carPlate } = req.body;
 
-	const id = crypto.randomUUID();
-
-	if (req.body.name.match(/[a-zA-Z] [a-zA-Z]+/)) {
-		if (req.body.email.match(/^(.+)@(.+)$/)) {
-
-			if (validate(req.body.cpf)) {
-				if (req.body.isDriver) {
-					if (req.body.carPlate.match(/[A-Z]{3}[0-9]{4}/)) {
-						const obj = {
-							accountId: id
-						};
-						result = obj;
-					} else {
-						// invalid car plate
-						result = -5;
-					}
-				} else {
-					const obj = {
-						accountId: id
-					};
-					result = obj;
-				}
-			} else {
-				// invalid cpf
-				result = -1;
+	if (!name) {
+		return res.status(422).send({
+			error: {
+				message: "Nome é obrigatório"
 			}
-		} else {
-			// invalid email
-			result = -2;
-		}
-
-	} else {
-		// invalid name
-		result = -3;
+		})
 	}
 
-	if (typeof result === "number") {
-		res.status(422).send(result + "");
+	if (!email) {
+		return res.status(422).send({
+			error: {
+				message: "Email é obrigatório"
+			}
+		})
+	}
+
+	if (!cpf) {
+		return res.status(422).send({
+			error: {
+				message: "CPF é obrigatório"
+			}
+		})
+	}
+
+	if (!name.match(/[a-zA-Z] [a-zA-Z]+/)) {
+		return res.status(422).send({
+			error: {
+				message: "Nome precisa ser completo"
+			}
+		})
+	}
+
+	if (!email.match(/^(.+)@(.+)$/)) {
+		return res.status(422).send({
+			error: {
+				message: "Email inválido"
+			}
+		})
+	}
+
+	if (!validate(cpf)) {
+		return res.status(422).send({
+			error: {
+				message: "CPF inválido"
+			}
+		})
+	}
+
+	if (!isDriver) {
+		return res.json({ accountId: crypto.randomUUID() })
+	}
+
+	if (carPlate.match(/[A-Z]{3}[0-9]{4}/)) {
+		return res.json({ accountId: crypto.randomUUID() })
 	} else {
-		res.json(result);
+		return res.status(422).send({
+			error: {
+				message: "Placa do carro inválida"
+			}
+		})
 	}
 }
 );
