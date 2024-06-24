@@ -8,6 +8,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
+// TODO: mover tipagem para um arquivo separado
 type CreateUserParams = {
 	name: string;
 	email: string;
@@ -31,23 +32,29 @@ type CreateUserResponse = {
 }
 
 export function createUser(params: Partial<CreateUserParams>): CreateUserResponse {
+	// TODO: chamar em um try catch, dentro do try chamar a API
 	const isValid = validateParams(params);
 
 	return { status: 200 }
 }
 
 function validateParams(params: Partial<CreateUserParams>): { isValid: boolean } {
+	// TODO: validar campos aqui, disparar new Error
 	return { isValid: true };
 }
 
+// TODO: mover para um arquivo separado
 async function postSignUp() {
 
 }
 
+// TODO: mover p/ o postSignUp
 app.post("/signup", async function (req, res) {
 	const { name, cpf, email, isDriver, carPlate } = req.body;
 
+	// TODO: interar em um map para os campos obrigatórios?
 	if (!name) {
+		// TODO: criar uma função p/ trigar a resposta de erro?
 		return res.status(422).send({
 			error: {
 				message: "Nome é obrigatório"
@@ -79,6 +86,7 @@ app.post("/signup", async function (req, res) {
 		})
 	}
 
+	// TODO: adicionar funções de validação	
 	if (!email.match(/^(.+)@(.+)$/)) {
 		return res.status(422).send({
 			error: {
@@ -101,13 +109,13 @@ app.post("/signup", async function (req, res) {
 
 	if (carPlate.match(/[A-Z]{3}[0-9]{4}/)) {
 		return res.json({ accountId: crypto.randomUUID() })
-	} else {
-		return res.status(422).send({
-			error: {
-				message: "Placa do carro inválida"
-			}
-		})
 	}
+
+	res.status(422).send({
+		error: {
+			message: "Placa do carro inválida"
+		}
+	})
 }
 );
 
