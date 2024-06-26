@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createUser } from "../src/api";
+import { createUser } from "../src/create-user";
 
 axios.defaults.validateStatus = function () {
 	return true;
@@ -73,7 +73,7 @@ it('email should be valid', async () => {
 });
 
 
-it('Email should not be empty', async () => {
+it('email should not be empty', async () => {
 	const payload = {
 		...params,
 		email: '',
@@ -97,6 +97,19 @@ it('name should not be empty', async () => {
 	expect(result.status).toBe(422);
 	expect(result.data.error.message).toBe("Nome é obrigatório");
 	expect(result.data.accountId).not.toBeDefined();
+});
+
+it('name should not be empty', async () => {
+	const payload = {
+		...params,
+		name: '',
+	};
+
+	const result = createUser(payload);
+
+	expect(result.status).toBe(422);
+	expect(result.error?.message).toBe("Nome é obrigatório");
+	expect(result.data?.accountId).not.toBeDefined();
 });
 
 it('name should be valid', async () => {
