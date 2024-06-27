@@ -1,25 +1,49 @@
+import { postSignUp } from "./api";
+import { VALID_CAR_PLATE, VALID_COMPLETE_NAME, VALID_EMAIL } from "./regex";
 import { validate } from "./validateCpf";
+import { CreateUserParams, CreateUserResponse } from './types';
 
-export function createUser(params: Partial<CreateUserParams>): CreateUserResponse {
-  // TODO: chamar em um try catch, dentro do try chamar a API
-
+export async function createUser(params: Partial<CreateUserParams>): Promise<CreateUserResponse> {
   try {
     validateParams(params)
-
-    return { status: 200 }
+    const response = await postSignUp(params);
+    return response;
 
   } catch (error) {
     // @ts-ignore
-    return { status: 422, error: { message: error.message } }
+    return { error: { message: error.message } }
   }
 }
 
 function validateParams(params: Partial<CreateUserParams>) {
-  // TODO: validar campos aqui, disparar new Error
   const { name, cpf, email, isDriver, carPlate } = params;
 
   if (!name) {
     throw new Error("Nome é obrigatório")
+  }
+
+  if (!cpf) {
+    throw new Error("CPF é obrigatório")
+  }
+
+  if (!email) {
+    throw new Error("Email é obrigatório")
+  }
+
+  if (!name.match(VALID_COMPLETE_NAME)) {
+    throw new Error("Nome precisa ser completo")
+  }
+
+  if (!email.match(VALID_EMAIL)) {
+    throw new Error("Email inválido")
+  }
+
+  if (!validate(cpf)) {
+    throw new Error("CPF inválido")
+  }
+
+  if (isDriver && !carPlate?.match(VALID_CAR_PLATE)) {
+    throw new Error("Placa do carro inválida")
   }
 }
 

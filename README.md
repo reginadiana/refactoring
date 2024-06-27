@@ -18,7 +18,7 @@ Para iniciar o servidor:
 yarn run dev
 ```
 
-Para executar os testes:
+Para executar os testes, execute o comando abaixo com o servidor em execução:
 
 ```bash
 yarn test

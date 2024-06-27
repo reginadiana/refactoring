@@ -1,4 +1,4 @@
-type CreateUserParams = {
+export type CreateUserParams = {
   name: string;
   email: string;
   cpf: string;
@@ -6,11 +6,11 @@ type CreateUserParams = {
   carPlate: string;
 }
 
-type Data = {
+export type Data = {
   accountId: number;
 }
 
-type CreateUserResponse = {
+export type CreateUserResponse = {
   status: number;
   error?: { message: string };
   data?: Data;

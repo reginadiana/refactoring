@@ -1,9 +1,5 @@
-import axios from "axios";
 import { createUser } from "../src/create-user";
-
-axios.defaults.validateStatus = function () {
-	return true;
-}
+import { connection } from "../src/api";
 
 const params = {
 	name: 'Diana Rodriguez',
@@ -12,14 +8,15 @@ const params = {
 	isPassenger: true,
 }
 
-test("should create passenger account successfully", async function () {
-	const result = await axios.post("http://localhost:3000/signup", params);
+it('should create passenger account successfully', async () => {
+	const result = await createUser(params);
 
 	expect(result.status).toBe(200);
 	expect(result.data?.accountId).toBeDefined();
+	expect(result.error?.message).toBeUndefined();
 });
 
-test("should create driver account successfully", async function () {
+it("should create driver account successfully", async function () {
 	const payload = {
 		...params,
 		isPassenger: false,
@@ -27,10 +24,11 @@ test("should create driver account successfully", async function () {
 		carPlate: 'ABC1234'
 	}
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
 	expect(result.status).toBe(200);
-	expect(result.data.accountId).toBeDefined();
+	expect(result.data?.accountId).toBeDefined();
+	connection.close()
 });
 
 it('CPF should be valid', async () => {
@@ -39,11 +37,10 @@ it('CPF should be valid', async () => {
 		cpf: '1111111',
 	};
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("CPF inválido");
-	expect(result.data.accountId).not.toBeDefined();
+	expect(result.error?.message).toBe("CPF inválido");
+	expect(result.data?.accountId).toBeUndefined();
 })
 
 it('CPF should not be empty', async () => {
@@ -52,11 +49,10 @@ it('CPF should not be empty', async () => {
 		cpf: '',
 	};
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("CPF é obrigatório");
-	expect(result.data.accountId).not.toBeDefined();
+	expect(result.error?.message).toBe("CPF é obrigatório");
+	expect(result.data?.accountId).toBeUndefined();
 });
 
 it('email should be valid', async () => {
@@ -65,11 +61,10 @@ it('email should be valid', async () => {
 		email: 'invalid-email',
 	};
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("Email inválido");
-	expect(result.data.accountId).not.toBeDefined();
+	expect(result.error?.message).toBe("Email inválido");
+	expect(result.data?.accountId).toBeUndefined();
 });
 
 
@@ -79,11 +74,10 @@ it('email should not be empty', async () => {
 		email: '',
 	};
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("Email é obrigatório");
-	expect(result.data.accountId).not.toBeDefined();
+	expect(result.error?.message).toBe("Email é obrigatório");
+	expect(result.data?.accountId).toBeUndefined();
 });
 
 it('name should not be empty', async () => {
@@ -92,24 +86,22 @@ it('name should not be empty', async () => {
 		name: '',
 	};
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("Nome é obrigatório");
-	expect(result.data.accountId).not.toBeDefined();
-});
-
-it('name should not be empty', async () => {
-	const payload = {
-		...params,
-		name: '',
-	};
-
-	const result = createUser(payload);
-
-	expect(result.status).toBe(422);
 	expect(result.error?.message).toBe("Nome é obrigatório");
-	expect(result.data?.accountId).not.toBeDefined();
+	expect(result.data?.accountId).toBeUndefined();
+});
+
+it('name should not be empty', async () => {
+	const payload = {
+		...params,
+		name: '',
+	};
+
+	const result = await createUser(payload);
+
+	expect(result.error?.message).toBe("Nome é obrigatório");
+	expect(result.data?.accountId).toBeUndefined();
 });
 
 it('name should be valid', async () => {
@@ -118,14 +110,13 @@ it('name should be valid', async () => {
 		name: 'Diana',
 	};
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("Nome precisa ser completo");
-	expect(result.data.accountId).not.toBeDefined();
+	expect(result.error?.message).toBe("Nome precisa ser completo");
+	expect(result.data?.accountId).toBeUndefined();
 });
 
-test("car plate should be valid", async function () {
+it("car plate should be valid", async function () {
 	const payload = {
 		...params,
 		isPassenger: false,
@@ -133,9 +124,8 @@ test("car plate should be valid", async function () {
 		carPlate: '1111'
 	}
 
-	const result = await axios.post("http://localhost:3000/signup", payload);
+	const result = await createUser(payload);
 
-	expect(result.status).toBe(422);
-	expect(result.data.error.message).toBe("Placa do carro inválida");
-	expect(result.data.accountId).not.toBeDefined();
+	expect(result.error?.message).toBe("Placa do carro inválida");
+	expect(result.data?.accountId).toBeUndefined();
 });
