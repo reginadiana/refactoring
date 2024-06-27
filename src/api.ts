@@ -13,7 +13,7 @@ export const connection = app.listen(port, () => {
 });
 
 export async function postSignUp(params: Partial<CreateUserParams>) {
-	const response = await axios.post("http://localhost:3000/signup", params)
+	const response = await axios.post(`http://localhost:${port}/signup`, params)
 
 	return { status: response.status, data: response.data };
 }
