@@ -57,7 +57,7 @@ kill -9 <PID>
 dependendem da camada de resource. Acho que isso nao deveria acontecer, deveriamos mocar a camada de 
 resource e ter um teste e2e ou integração com os dois. 
 - A camada de resource foi divida em um arquivo de configuração que trata da conexão e desconexão com o banco, outro arquivo para as queries e outro para validar e chamar a query de criação.
-- A camada de driver foi divida em um arquivo de configuração que abre a conexão e desconexão ocom o servidor, lida com as portas, ouve o servidor, etc.
+- A camada de driver foi divida em um arquivo de configuração que abre a conexão e desconexão com o servidor, lida com as portas, ouve o servidor, etc.
 - A camada de aplication valida os parametros e chama o serviço de `/sign-up` na camada de driver
 - As validaçoes em todas as camadas foram lidadas com `throw new Error` e `try catch`.
 - Removi os erros em números e os transformei e em mensagens descritivas para melhor entendimento do que
