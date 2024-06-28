@@ -19,5 +19,6 @@ export async function postSignUp(params: Partial<CreateUserParams>) {
 }
 
 app.post("/signup", async function (_req, res) {
+	// TODO: bater no banco de dados
 	res.json({ accountId: crypto.randomUUID() })
 });

@@ -28,7 +28,6 @@ it("should create driver account successfully", async function () {
 
 	expect(result.status).toBe(200);
 	expect(result.data?.accountId).toBeDefined();
-	connection.close()
 });
 
 it('CPF should be valid', async () => {

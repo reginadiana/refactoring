@@ -24,4 +24,26 @@ Para executar os testes, execute o comando abaixo com o servidor em execução:
 yarn test
 ```
 
+Para inicializar o banco de dados: 
+
+```bash
+docker-compose up
+```
+
+Para para o docker: 
+
+```bash
+docker-compose down
+```
+
+Para parar processos antigos:
+
+```bash
+sudo lsof -i :3000
+```
+
+```bash
+kill -9 <PID>
+```
+
 

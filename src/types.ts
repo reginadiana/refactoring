@@ -3,7 +3,8 @@ export type CreateUserParams = {
   email: string;
   cpf: string;
   isDriver: boolean;
-  carPlate: string;
+  isPassenger: boolean;
+  carPlate: string | null;
 }
 
 export type Data = {
