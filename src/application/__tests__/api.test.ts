@@ -1,5 +1,4 @@
-import { createUser } from "../src/create-user";
-import { connection } from "../src/api";
+import { createUser } from "../create-user";
 
 const params = {
 	name: 'Diana Rodriguez',
@@ -19,6 +18,7 @@ it('should create passenger account successfully', async () => {
 it("should create driver account successfully", async function () {
 	const payload = {
 		...params,
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
 		isPassenger: false,
 		isDriver: true,
 		carPlate: 'ABC1234'

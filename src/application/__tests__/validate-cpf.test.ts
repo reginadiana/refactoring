@@ -1,10 +1,10 @@
-import { validate } from "../src/validateCpf";
+import { validate } from "../validate-cpf";
 
 test.each([
 	"97456321558",
 	"71428793860",
 	"87748248800"
-])("Deve testar um cpf válido: %s", function (cpf: any) {
+])("Deve testar um cpf válido: %s", function (cpf: string) {
 	expect(validate(cpf)).toBe(true);
 });
 

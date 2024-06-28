@@ -1,13 +1,12 @@
-import { postSignUp } from "./api";
+import { postSignUp } from "../driver/api";
 import { VALID_CAR_PLATE, VALID_COMPLETE_NAME, VALID_EMAIL } from "./regex";
-import { validate } from "./validateCpf";
+import { validate } from "./validate-cpf";
 import { CreateUserParams, CreateUserResponse } from './types';
 
 export async function createUser(params: Partial<CreateUserParams>): Promise<CreateUserResponse> {
   try {
     validateParams(params)
-    const response = await postSignUp(params);
-    return response;
+    return await postSignUp(params);;
 
   } catch (error) {
     // @ts-ignore

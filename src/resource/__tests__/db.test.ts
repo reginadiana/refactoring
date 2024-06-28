@@ -1,4 +1,5 @@
-import { createNewAccount, close } from "../src/db";
+import { createNewAccount } from "../create-account";
+import { close } from '../config'
 
 const params = {
 	name: 'Diana Rodriguez',
@@ -13,6 +14,13 @@ it('should create passenger account successfully', async () => {
 	const result = await createNewAccount(params)
 
 	expect(result?.created).toBe(true);
+	expect(result.data.account_id).toBeDefined();
+	expect(result.data.name).toBe(params.name);
+	expect(result.data.email).toBe(params.email);
+	expect(result.data.cpf).toBe(params.cpf);
+	expect(result.data.is_passenger).toBe(params.isPassenger);
+	expect(result.data.is_driver).toBe(params.isDriver);
+	expect(result.data.car_plate).toBe(params.carPlate);
 });
 
 it('should not create passenger account when account already exists', async () => {
