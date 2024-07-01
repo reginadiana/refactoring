@@ -69,5 +69,7 @@ sendo feita apenas nas regras de negocio.
 ter um ou outro.
 --- 
 
-### [Em breve] - Decisões técnicas do Branas/O que podemos melhorar
+### [01/07/2024] - Decisões técnicas do Branas/O que podemos melhorar
 
+- Criar endpoint de GET para accounts p/ verificar se conta foi realmente criada, nao confiar no resultado da response. O mesmo vale para a camada de resource
+- Separar os testes por camadas. Ex: na camada de `application`, nao faz sentido termos testes que envolvem servidor, resposta, axios, etc 
