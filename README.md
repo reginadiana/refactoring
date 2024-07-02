@@ -72,4 +72,4 @@ ter um ou outro.
 ### [01/07/2024] - Decisões técnicas do Branas/O que podemos melhorar
 
 - Criar endpoint de GET para accounts p/ verificar se conta foi realmente criada, nao confiar no resultado da response. O mesmo vale para a camada de resource
-- Separar os testes por camadas. Ex: na camada de `application`, nao faz sentido termos testes que envolvem servidor, resposta, axios, etc 
+- Separar os testes por camadas. Ex: na camada de `application`, nao faz sentido termos testes que envolvem servidor, resposta, axios, etc. E elas nao devem depender de outras camadas. Por exemplo, enquanto rodamos os testes de application, tanto faz se o driver ou resource estao rodando.  
