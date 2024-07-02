@@ -72,4 +72,9 @@ ter um ou outro.
 ### [01/07/2024] - Decisões técnicas do Branas/O que podemos melhorar
 
 - Criar endpoint de GET para accounts p/ verificar se conta foi realmente criada, nao confiar no resultado da response. O mesmo vale para a camada de resource
-- Separar os testes por camadas. Ex: na camada de `application`, nao faz sentido termos testes que envolvem servidor, resposta, axios, etc. E elas nao devem depender de outras camadas. Por exemplo, enquanto rodamos os testes de application, tanto faz se o driver ou resource estao rodando.  
+- Separar os testes por camadas. Ex: na camada de `application`, nao faz sentido termos testes que envolvem servidor, resposta, axios, etc. E elas nao devem depender de outras camadas. Por exemplo, enquanto rodamos os testes de application, tanto faz se o driver ou resource estao rodando.
+- Implementacao de classes. Usamos a `interface` para manter o contrato 
+- O driver chama a cama de application e a camada de application chama a camada de resource. 
+- Usar a exeçoes do jest: ![image](https://github.com/reginadiana/refactoring/assets/46378210/8cebfb6c-1bc0-43ca-8995-bc841aebbb24)
+- "Pasta nao é camada, é logica, podemos ter tudo no mesmo arquivo e mesmo assim ter a separacao de camadas"
+
