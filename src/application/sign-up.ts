@@ -1,21 +1,25 @@
-import { postSignUp } from "../driver/api";
 import { VALID_CAR_PLATE, VALID_COMPLETE_NAME, VALID_EMAIL } from "./regex";
-import { validate } from "./validate-cpf";
-import { CreateUserParams, CreateUserResponse } from './types';
+import { validate as validateCPF } from "./validate-cpf";
+import { Account } from '../types';
+import crypto from "crypto";
+import { getAccountByEmail, saveAccount } from "../resource";
 
-export async function createUser(params: Partial<CreateUserParams>): Promise<CreateUserResponse> {
-  try {
-    validateParams(params)
-    return await postSignUp(params);;
+export async function signUp(account: Partial<Account>) {
+  await validate(account);
+  await saveAccount({...account, account_id: crypto.randomUUID() } as Account)
+  const response = await getAccountByEmail(account.email)
 
-  } catch (error) {
-    // @ts-ignore
-    return { error: { message: error.message } }
-  }
+  return response;
 }
 
-function validateParams(params: Partial<CreateUserParams>) {
+async function validate(params: Partial<Account>) {
   const { name, cpf, email, isDriver, carPlate } = params;
+
+  const account = await getAccountByEmail(email);
+  
+  if (account) {
+    throw new Error("Conta já existe com este email");
+  }
 
   if (!name) {
     throw new Error("Nome é obrigatório")
@@ -37,7 +41,7 @@ function validateParams(params: Partial<CreateUserParams>) {
     throw new Error("Email inválido")
   }
 
-  if (!validate(cpf)) {
+  if (!validateCPF(cpf)) {
     throw new Error("CPF inválido")
   }
 

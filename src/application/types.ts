@@ -1,13 +1,4 @@
-export type CreateUserParams = {
-  name: string;
-  email: string;
-  cpf: string;
-  isDriver: boolean;
-  isPassenger: boolean;
-  carPlate: string | null;
-}
-
-export type Data = {
+type Data = {
   accountId: number;
 }
 
@@ -15,4 +6,8 @@ export type CreateUserResponse = {
   status: number;
   error?: { message: string };
   data?: Data;
+}
+
+export type Error = {
+  error?: { message: string };
 }

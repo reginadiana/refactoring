@@ -54,7 +54,7 @@ kill -9 <PID>
 
 - Dividi as camadas de application, drive e resource em pastas separadas.
 - Cada camada possui uma pasta de arquivos de teste, porém 2 testes de sucesso da camada de driver
-dependendem da camada de resource. Acho que isso nao deveria acontecer, deveriamos mocar a camada de 
+dependendem da camada de resource. Acho que isso não deveria acontecer, deveriamos mocar a camada de 
 resource e ter um teste e2e ou integração com os dois. 
 - A camada de resource foi divida em um arquivo de configuração que trata da conexão e desconexão com o banco, outro arquivo para as queries e outro para validar e chamar a query de criação.
 - A camada de driver foi divida em um arquivo de configuração que abre a conexão e desconexão com o servidor, lida com as portas, ouve o servidor, etc.
@@ -71,10 +71,10 @@ ter um ou outro.
 
 ### [01/07/2024] - Decisões técnicas do Branas/O que podemos melhorar
 
-- Criar endpoint de GET para accounts p/ verificar se conta foi realmente criada, nao confiar no resultado da response. O mesmo vale para a camada de resource
-- Separar os testes por camadas. Ex: na camada de `application`, nao faz sentido termos testes que envolvem servidor, resposta, axios, etc. E elas nao devem depender de outras camadas. Por exemplo, enquanto rodamos os testes de application, tanto faz se o driver ou resource estao rodando.
+- Criar endpoint de GET para accounts p/ verificar se conta foi realmente criada, não confiar no resultado da response. O mesmo vale para a camada de resource
+- Separar os testes por camadas. Ex: na camada de `application`, não faz sentido termos testes que envolvem servidor, resposta, axios, etc. E elas não devem depender de outras camadas. Por exemplo, enquanto rodamos os testes de application, tanto faz se o driver ou resource estão rodando.
 - Implementacao de classes. Usamos a `interface` para manter o contrato 
-- O driver chama a cama de application e a camada de application chama a camada de resource. 
+- O driver chama a camada de application e a camada de application chama a camada de resource. 
 - Usar a exeçoes do jest: ![image](https://github.com/reginadiana/refactoring/assets/46378210/8cebfb6c-1bc0-43ca-8995-bc841aebbb24)
-- "Pasta nao é camada, é logica, podemos ter tudo no mesmo arquivo e mesmo assim ter a separacao de camadas"
+- "Pasta não é camada, é logica, podemos ter tudo no mesmo arquivo e mesmo assim ter a separação de camadas"
 

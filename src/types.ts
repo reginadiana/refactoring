@@ -1,4 +1,5 @@
-export type CreateUserParams = {
+export type Account = {
+  account_id: string;
   name: string;
   email: string;
   cpf: string;

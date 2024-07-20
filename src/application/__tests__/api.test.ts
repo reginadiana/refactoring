@@ -1,18 +1,40 @@
-import { createUser } from "../create-user";
+import { signUp } from "../sign-up";
 
 const params = {
 	name: 'Diana Rodriguez',
-	email: `diana.rodriguez${Math.random()}@gmail.com`,
 	cpf: "87748248800",
 	isPassenger: true,
+	isDriver: false,
+	carPlate: ''
 }
 
 it('should create passenger account successfully', async () => {
-	const result = await createUser(params);
+	const payload = {
+		...params,
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
+	}
+	const account = await signUp(payload);
 
-	expect(result.status).toBe(200);
-	expect(result.data?.accountId).toBeDefined();
-	expect(result.error?.message).toBeUndefined();
+	expect(account.error?.message).toBeUndefined();
+
+	expect(account.name).toBe(payload.name);
+	expect(account.email).toBe(payload.email);
+	expect(account.cpf).toBe(payload.cpf);
+	expect(account.is_passenger).toBe(payload.isPassenger);
+	expect(account.is_driver).toBe(payload.isDriver);
+	expect(account.car_plate).toBe(payload.carPlate);
+});
+
+it('should not create passenger account when account already exists', async () => {
+	const payload = {
+		...params,
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
+	}
+
+	await signUp(payload)
+
+	// Try create again
+	await expect(() => signUp(payload)).rejects.toThrowError('Conta já existe com este email')
 });
 
 it("should create driver account successfully", async function () {
@@ -24,34 +46,36 @@ it("should create driver account successfully", async function () {
 		carPlate: 'ABC1234'
 	}
 
-	const result = await createUser(payload);
+	const account = await signUp(payload);
 
-	expect(result.status).toBe(200);
-	expect(result.data?.accountId).toBeDefined();
+	expect(account.error?.message).toBeUndefined();
+
+	expect(account.name).toBe(payload.name);
+	expect(account.email).toBe(payload.email);
+	expect(account.cpf).toBe(payload.cpf);
+	expect(account.is_passenger).toBe(payload.isPassenger);
+	expect(account.is_driver).toBe(payload.isDriver);
+	expect(account.car_plate).toBe(payload.carPlate);
 });
 
 it('CPF should be valid', async () => {
 	const payload = {
 		...params,
 		cpf: '1111111',
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
 	};
 
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("CPF inválido");
-	expect(result.data?.accountId).toBeUndefined();
+	await expect(() => signUp(payload)).rejects.toThrowError('CPF inválido')
 })
 
 it('CPF should not be empty', async () => {
 	const payload = {
 		...params,
 		cpf: '',
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
 	};
 
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("CPF é obrigatório");
-	expect(result.data?.accountId).toBeUndefined();
+	await expect(() => signUp(payload)).rejects.toThrowError('CPF é obrigatório')
 });
 
 it('email should be valid', async () => {
@@ -60,12 +84,8 @@ it('email should be valid', async () => {
 		email: 'invalid-email',
 	};
 
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("Email inválido");
-	expect(result.data?.accountId).toBeUndefined();
+	await expect(() => signUp(payload)).rejects.toThrowError('Email inválido')
 });
-
 
 it('email should not be empty', async () => {
 	const payload = {
@@ -73,46 +93,27 @@ it('email should not be empty', async () => {
 		email: '',
 	};
 
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("Email é obrigatório");
-	expect(result.data?.accountId).toBeUndefined();
+	await expect(() => signUp(payload)).rejects.toThrowError('Email é obrigatório')
 });
 
 it('name should not be empty', async () => {
 	const payload = {
 		...params,
 		name: '',
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
 	};
 
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("Nome é obrigatório");
-	expect(result.data?.accountId).toBeUndefined();
-});
-
-it('name should not be empty', async () => {
-	const payload = {
-		...params,
-		name: '',
-	};
-
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("Nome é obrigatório");
-	expect(result.data?.accountId).toBeUndefined();
+	await expect(() => signUp(payload)).rejects.toThrowError('Nome é obrigatório')
 });
 
 it('name should be valid', async () => {
 	const payload = {
 		...params,
 		name: 'Diana',
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
 	};
-
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("Nome precisa ser completo");
-	expect(result.data?.accountId).toBeUndefined();
+	
+	await expect(() => signUp(payload)).rejects.toThrowError('Nome precisa ser completo')
 });
 
 it("car plate should be valid", async function () {
@@ -120,11 +121,9 @@ it("car plate should be valid", async function () {
 		...params,
 		isPassenger: false,
 		isDriver: true,
-		carPlate: '1111'
+		carPlate: '1111',
+		email: `diana.rodriguez${Math.random()}@gmail.com`,
 	}
 
-	const result = await createUser(payload);
-
-	expect(result.error?.message).toBe("Placa do carro inválida");
-	expect(result.data?.accountId).toBeUndefined();
+	await expect(() => signUp(payload)).rejects.toThrowError('Placa do carro inválida')
 });
